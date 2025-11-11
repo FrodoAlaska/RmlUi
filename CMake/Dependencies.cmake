@@ -1,3 +1,5 @@
+include(FetchContent)
+
 #[[
 	Set up external dependencies required to build RmlUi itself.
 
@@ -7,7 +9,12 @@
 ]]
 
 if(RMLUI_FONT_ENGINE STREQUAL "freetype")
-	find_package("Freetype")
+	FetchContent_Declare(
+		freetype
+		GIT_REPOSITORY https://github.com/freetype/freetype.git
+		GIT_TAG        fc9cc5038e05edceec3d0f605415540ac76163e9
+	)
+	FetchContent_MakeAvailable(freetype)
 
 	if(FREETYPE_VERSION_STRING)
 		if(FREETYPE_VERSION_STRING VERSION_EQUAL "2.11.0" AND CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
