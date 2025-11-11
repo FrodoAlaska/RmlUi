@@ -393,10 +393,7 @@ unset(rmlui_core_TYPE)
 if(RMLUI_FONT_ENGINE STREQUAL "freetype")
 	# Include the source files for the default font engine.
 	add_subdirectory("FontEngineDefault")
-
-	# RMLUI_CMAKE_MINIMUM_VERSION_RAISE_NOTICE:
-	# From CMake 3.13 the next line can be moved into `FontEngineDefault/CMakeLists.txt`, see CMP0079.
-	target_link_libraries(rmlui_core PRIVATE Freetype::Freetype)
+	target_link_libraries(rmlui_core PRIVATE freetype)
 endif()
 
 if(RMLUI_LOTTIE_PLUGIN)
@@ -409,24 +406,6 @@ if(RMLUI_SVG_PLUGIN)
 	# RMLUI_CMAKE_MINIMUM_VERSION_RAISE_NOTICE:
 	# From CMake 3.13 we could move this to `Lottie/CMakeLists.txt`, see CMP0079.
 	target_link_libraries(rmlui_core PRIVATE lunasvg::lunasvg)
-endif()
-
-if(RMLUI_TRACY_PROFILING)
-	if(CMAKE_CONFIGURATION_TYPES AND RMLUI_TRACY_CONFIGURATION)
-		target_link_libraries(rmlui_core PUBLIC "$<$<CONFIG:Tracy>:Tracy::TracyClient>")
-		target_compile_definitions(rmlui_core PUBLIC "$<$<CONFIG:Tracy>:RMLUI_TRACY_PROFILING>")
-		if(RMLUI_TRACY_MEMORY_PROFILING)
-			target_compile_definitions(rmlui_core PRIVATE "$<$<CONFIG:Tracy>:RMLUI_TRACY_MEMORY_PROFILING>")
-		endif()
-		message(STATUS "Tracy profiling enabled in configuration `Tracy`.")
-	else()
-		target_link_libraries(rmlui_core PUBLIC Tracy::TracyClient)
-		target_compile_definitions(rmlui_core PUBLIC "RMLUI_TRACY_PROFILING")
-		if(RMLUI_TRACY_MEMORY_PROFILING)
-			target_compile_definitions(rmlui_core PRIVATE "RMLUI_TRACY_MEMORY_PROFILING")
-		endif()
-		message(STATUS "Tracy profiling enabled.")
-	endif()
 endif()
 
 if(NOT RMLUI_THIRDPARTY_CONTAINERS)
